@@ -346,47 +346,47 @@ void ArmatureAnimation::update(float dt)
     {
         _armature->retain();
         _armature->autorelease();
-    }
 
-    while (_frameEventQueue.size() > 0)
-    {
-        FrameEvent *event = _frameEventQueue.front();
-        _frameEventQueue.pop();
-
-        _ignoreFrameEvent = true;
-        
-        if(_frameEventTarget)
+        while (_frameEventQueue.size() > 0)
         {
-            (_frameEventTarget->*_frameEventCallFunc)(event->bone, event->frameEventName, event->originFrameIndex, event->currentFrameIndex);
+            FrameEvent *event = _frameEventQueue.front();
+            _frameEventQueue.pop();
+    
+            _ignoreFrameEvent = true;
+            
+            if(_frameEventTarget)
+            {
+                (_frameEventTarget->*_frameEventCallFunc)(event->bone, event->frameEventName, event->originFrameIndex, event->currentFrameIndex);
+            }
+            
+            if (_frameEventListener)
+            {
+                _frameEventListener(event->bone, event->frameEventName, event->originFrameIndex, event->currentFrameIndex);
+            }
+            
+            
+            _ignoreFrameEvent = false;
+    
+            CC_SAFE_DELETE(event);
         }
-        
-        if (_frameEventListener)
+    
+        while (_movementEventQueue.size() > 0)
         {
-            _frameEventListener(event->bone, event->frameEventName, event->originFrameIndex, event->currentFrameIndex);
+            MovementEvent *event = _movementEventQueue.front();
+            _movementEventQueue.pop();
+            
+            if(_movementEventTarget)
+            {
+                (_movementEventTarget->*_movementEventCallFunc)(event->armature, event->movementType, event->movementID);
+            }
+            
+            if (_movementEventListener)
+            {
+                _movementEventListener(event->armature, event->movementType, event->movementID);
+            }
+            
+            CC_SAFE_DELETE(event);
         }
-        
-        
-        _ignoreFrameEvent = false;
-
-        CC_SAFE_DELETE(event);
-    }
-
-    while (_movementEventQueue.size() > 0)
-    {
-        MovementEvent *event = _movementEventQueue.front();
-        _movementEventQueue.pop();
-        
-        if(_movementEventTarget)
-        {
-            (_movementEventTarget->*_movementEventCallFunc)(event->armature, event->movementType, event->movementID);
-        }
-        
-        if (_movementEventListener)
-        {
-            _movementEventListener(event->armature, event->movementType, event->movementID);
-        }
-        
-        CC_SAFE_DELETE(event);
     }
 }
 
