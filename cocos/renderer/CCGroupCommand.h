@@ -40,6 +40,7 @@ public:
     void releaseGroupID(int groupID);
 
 protected:
+    bool _hasUnusedID;
     friend class Renderer;
     GroupCommandManager();
     ~GroupCommandManager();
