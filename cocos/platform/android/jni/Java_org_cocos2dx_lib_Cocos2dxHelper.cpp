@@ -148,6 +148,7 @@ void conversionEncodingJNI(const char* src, int byteSize, const char* fromCharse
         methodInfo.env->DeleteLocalRef(strArray);
         methodInfo.env->DeleteLocalRef(stringArg1);
         methodInfo.env->DeleteLocalRef(stringArg2);
+        methodInfo.env->DeleteLocalRef(newArray);//should be delete 
         methodInfo.env->DeleteLocalRef(methodInfo.classID);
     }
 }
